@@ -6,10 +6,18 @@
 /deps/
 /doc/
 /ebin/
+/escript/
+/escript.lock
 /logs/
 /plugins/
+/plugins.lock
+/sbin/
+/sbin.lock
+/xrefr
 
-/rabbitmq_coap_pubsub.d
+rabbitmq_coap_pubsub.d
 
-erl_crash.dump
-test/TEST-*.xml
+/user.bazelrc
+/bazel-*
+
+/.vscode/
