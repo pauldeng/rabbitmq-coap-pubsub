@@ -12,10 +12,11 @@
 
 -export([coap_discover/2, coap_get/4, coap_post/4, coap_put/4, coap_delete/3,
     coap_observe/4, coap_unobserve/1, handle_info/2, coap_ack/2]).
+-export([coap_get/5, coap_observe/5]).
 
 -include_lib("amqp_client/include/amqp_client.hrl").
 -include_lib("gen_coap/include/coap.hrl").
--include_lib("rabbitmq_lvc/include/rabbit_lvc_plugin.hrl").
+-include_lib("rabbitmq_lvc_exchange/include/rabbit_lvc_plugin.hrl").
 
 -record(obstate, {connection, channel, ack, last_update}).
 
@@ -45,6 +46,9 @@ coap_get(_ChId, _Prefix, [VHost, Exchange, Key], _Query) ->
     handle_get(VHost, Exchange, Key);
 coap_get(_ChId, _Prefix, _Else, _Query) ->
     {error, not_found}.
+coap_get(_ChId, _Prefix, _Else, _Query, _Content) ->
+    % todo: fix logic here
+    ok.
 
 handle_get(VHost, Exchange, Key) ->
     case rabbit_access_control:check_user_login(<<"anonymous">>, []) of
@@ -99,6 +103,9 @@ coap_observe(ChId, _Prefix, [VHost, Exchange], Ack) ->
     handle_observe(ChId, VHost, Exchange, <<"">>, Ack);
 coap_observe(ChId, _Prefix, [VHost, Exchange, Key], Ack) ->
     handle_observe(ChId, VHost, Exchange, Key, Ack).
+coap_observe(none, none, none, none, none) ->
+    % todo: fix logic here
+    ok.
 
 handle_observe(ChId, VHost, Exchange, Key, Ack) ->
     case rabbit_coap_amqp_client:init_connection(ChId, VHost) of
